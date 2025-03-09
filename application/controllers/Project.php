@@ -192,4 +192,14 @@ class Project extends CI_Controller {
 		echo 'berhasil';
 
 	}
+
+	public function hapus_project(){
+		$idpj = $this->input->post('idpj');
+		$user_update = $this->session->userdata('nama');
+		$tgl_update = date('Y-m-d H:i:s');
+
+		$this->db->query("UPDATE nj_project SET STATUS_SIMPAN = 'HAPUS', WAKTU_UPDATE = '$tgl_update', USER_UPDATE = '$user_update' WHERE ID_PROJECTS = '$idpj' AND STATUS_SIMPAN ='BARU'");
+		$this->db->query("UPDATE nj_tasks SET STATUS_SIMPAN = 'HAPUS', WAKTU_UPDATE = '$tgl_update', USER_UPDATE = '$user_update' WHERE ID_PROJECTS = '$idpj' AND STATUS_SIMPAN ='BARU'");
+		echo 'berhasil';
+	}
 }
