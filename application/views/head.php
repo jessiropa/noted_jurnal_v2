@@ -18,3 +18,7 @@
 <link rel="stylesheet" href="<?=base_url()?>assets/css/style.css" />
 <!-- End layout styles -->
 <link rel="shortcut icon" href="<?=base_url()?>assets/images/favicon.png" />
+<link rel="stylesheet" href="<?= base_url()?>assets/datatables/datatables.min.css">
+<!-- <link rel="stylesheet" href="<?= base_url()?>assets/datatables/dataTables.bootstrap5.min.css"> -->
+<!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"> -->
+<!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"> -->
