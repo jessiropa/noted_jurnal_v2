@@ -308,9 +308,6 @@
                                 <?php
                                     if($project->num_rows() > 0){
                                         $data = $project->result();
-                                //         foreach ($data as $p){
-                                //             echo '<option value="'.$p->ID_PROJECTS.'">'.$p->NAMA_PROJECT.'</option>';
-                                // }
                                 }else{
                                 echo 'ini error si';
                                 }

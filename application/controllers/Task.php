@@ -139,7 +139,7 @@ class Task extends CI_Controller {
 		$tgl_update = date('Y-m-d H:i:s');
 
 		$this->db->query("UPDATE nj_tasks SET STATUS_SIMPAN = 'HAPUS', WAKTU_UPDATE = '$tgl_update', USER_UPDATE = '$user_update' WHERE ID_TASK = '$idtask' AND STATUS_SIMPAN ='BARU'");
-		echo 'berhasil';
+		echo 'berhasil'; 
 	}
 
 	public function edit_task(){
