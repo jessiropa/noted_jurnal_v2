@@ -26,6 +26,7 @@ class Link extends CI_Controller {
 		$get_link = $this->db->query("SELECT 
 		a.JUDUL_LINK,
 		a.URL,
+		a.ID_LINK,
 		b.NAMA_KATEGORI,
 		b.ID_KATEGORI
 		FROM 
@@ -126,26 +127,35 @@ class Link extends CI_Controller {
         ID_LINK
         FROM nj_link
         ORDER BY ID_LINK DESC
+		-- ORDER BY CAST(SUBSTRING(ID_LINK, 4) AS UNSIGNED) DESC 
         LIMIT 1");
 
 		if($get_data->num_rows() > 0){
 			$get_idlink = $get_data->row()->ID_LINK;
+			// var_dump('ada data');
 		}else{
 			$get_idlink = null;
+			// var_dump('tidak ada data');
 		}
 
 		// buat id kategori 
 		if($get_idlink){
+			// var_dump('ada data');
 			// jika ada 
-			$num = (int) substr($get_idlink, 2);
+			$num = (int) substr($get_idlink, 3);
             $num++;
             $new_id = 'LNK'.str_pad($num, 4, '0', STR_PAD_LEFT);
 		}else{
+			// var_dump('tidak ada data');
 			// jika tidak ada
 			$new_id = 'LNK0001';
 		}
 
-		// insert database
+		// print_r($get_data);
+
+		// var_dump($new_id, $get_idlink, $get_data);
+
+		// // insert database
 		$lnk['ID_LINK'] = $new_id;
 		$lnk['ID_KATEGORI'] = $kategori;
 		$lnk['JUDUL_LINK'] = $judul_link;
@@ -198,6 +208,59 @@ class Link extends CI_Controller {
 		echo json_encode([
 			'judul' => $nama_kategori,
 			'idkategori' => $id_kategori,
+			'status' => $status
+		]);
+	}
+
+	public function hapus_link(){
+		$idlink = $this->input->post('idlink');
+		$user_update = $this->session->userdata('nama');
+		$tgl_update = date('Y-m-d H:i:s');
+
+		// update status simpan link 
+		$this->db->query("UPDATE nj_link SET STATUS_SIMPAN = 'HAPUS', WAKTU_UPDATE = '$tgl_update', USER_UPDATE = '$user_update' WHERE ID_LINK = '$idlink' AND STATUS_SIMPAN ='BARU'");
+		echo 'berhasil'; 
+	}
+
+	public function edit_link(){
+		$idlink = $this->input->post('idlink');
+
+		$get_link = $this->db->query("SELECT 
+		nl.JUDUL_LINK,
+		-- nl.ID_KATEGORI,
+		nl.ID_LINK,
+		nl.URL,
+		nk.ID_KATEGORI,
+		nk.NAMA_KATEGORI
+		FROM 
+		nj_link  nl
+		LEFT JOIN nj_kategori nk ON nl.ID_KATEGORI = nk.ID_KATEGORI
+		WHERE 
+		nl.ID_LINK = '$idlink' 
+		AND nl.STATUS_SIMPAN = 'BARU'");
+
+		if($get_link->num_rows() > 0){
+			$id_link = $get_link->row()->ID_LINK;
+			$judul_link = $get_link->row()->JUDUL_LINK;
+			$id_kategori = $get_link->row()->ID_KATEGORI;
+			$nama_kategori = $get_link->row()->NAMA_KATEGORI;
+			$url = $get_link->row()->URL;
+			$status = '1';
+		}else{
+			$id_kategori = '';
+			$nama_kategori = '';
+			$judul_link = '';
+			$id_link = '';
+			$url = '';
+			$status = '0';
+		}
+
+		echo json_encode([
+			'judul' => $nama_kategori,
+			'idkategori' => $id_kategori,
+			'idlink' => $id_link,
+			'judul_link' => $judul_link,
+			'link' => $url,
 			'status' => $status
 		]);
 	}

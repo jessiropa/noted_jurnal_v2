@@ -99,9 +99,9 @@
                                                         </a>
                                                         <div>
                                                             <button type="button" class="btn btn-warning btn-sm"
-                                                                onclick="edit_task()">✏️</button>
+                                                                onclick="edit_link('<?= $rf['ID_LINK']; ?>')">✏️</button>
                                                             <button type="button" class="btn btn-danger btn-sm"
-                                                                onclick="konfirmasi_hapus()">❌</button>
+                                                                onclick="konfirmasi_hapus_link('<?= $rf['ID_LINK']; ?>', '<?= $rf['JUDUL_LINK']; ?>')">❌</button>
                                                         </div>
                                                     </li>
 
@@ -259,6 +259,65 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="modal fade" id="modaleditlink" data-backdrop="static" data-keyboard="false"
+                            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="staticBackdropLabel">Tambah Link</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label for="exampleFormControlInput1" class="form-label"> 📌 Judul Link
+                                                </label>
+                                                <input type="text" class="form-control" id="judul_link_edit"
+                                                    placeholder="Judul Link ...">
+                                                <input type="hidden" class="form-control" id="id_link_edit">
+                                            </div>
+                                        </div><br>
+                                        <?php
+                                    if($kategori->num_rows() > 0){
+                                        $data = $kategori->result();
+                                }else{
+                                echo 'ini error si';
+                                }
+                                ?>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="exampleSelectGender">📂 Kategori</label>
+                                                    <select class="form-control" id="pilihkategori">
+                                                        <?php foreach ($data as $p): ?>
+                                                        <option value="<?= $p->ID_KATEGORI; ?>">
+                                                            <?= $p->NAMA_KATEGORI; ?>
+                                                        </option>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label for="exampleFormControlInput1" class="form-label"> 🌐 Link
+                                                </label>
+                                                <input type="text" class="form-control" id="link_edit">
+                                            </div>
+                                        </div><br>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Batal</button>
+                                        <button type="button" class="btn btn-primary"
+                                            onclick="simpan_link()">Simpan</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="modal fade" id="modalSukses" tabindex="-1" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
@@ -274,7 +333,7 @@
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="staticBackdropLabel">Edit Task</h5>
+                                        <h5 class="modal-title" id="staticBackdropLabel"></h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -328,6 +387,7 @@
                                 $('#modalkategori').removeClass('show').hide();
                                 $('.modal-backdrop').remove();
                                 $('#kategori').val('');
+                                window.location.reload();
 
                             }, 1000);
                         }
@@ -352,7 +412,7 @@
                     judul_link: $('#judul_link').val(),
                     link: $('#link').val()
                 }
-                console.log(data)
+                // console.log(data)
                 $.ajax({
                     type: 'POST',
                     url: "<?php echo base_url('link/simpan_link/'); ?>",
@@ -372,6 +432,7 @@
                                 $('.modal-backdrop').remove();
                                 $('#judul_link').val('');
                                 $('#link').val('');
+                                window.location.reload();
 
                             }, 1000);
                         }
@@ -483,6 +544,121 @@
                     error: function(xhr, status, error) {
                         console.log(error);
                     },
+                });
+            }
+
+            function konfirmasi_hapus_link(idlink, judullink) {
+                $("#hapus").html("Apakah Anda yakin ingin menghapus link  <b> <u>" + judullink + " </b> </u>?");
+                var hapus = new bootstrap.Modal(document.getElementById('modalKonfirmasiHapus'));
+                hapus.show();
+                // Tambahkan event listener hanya saat tombol "Hapus" ditekan
+                document.getElementById("btnKonfirmasiHapus").onclick = function() {
+                    hapus_link(idlink); // Panggil fungsi hapus dengan idlink
+                    hapus.hide(); // Tutup modal setelah konfirmasi
+                };
+            }
+
+            function hapus_link(idlink) {
+                var data = {
+                    idlink: idlink
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: "<?php echo base_url('link/hapus_link/'); ?>",
+                    data: data,
+                    success: function(response) {
+
+                        if (response == 'berhasil') {
+                            $("#sukses").html("Data berhasil dihapus");
+                            var sukses = new bootstrap.Modal(document.getElementById('modalSukses'));
+                            sukses.show();
+                            // $('#modalSukses').modal('show');
+                            setTimeout(function() {
+                                sukses.hide();
+                                window.location.reload();
+                                // view_list_task();
+                            }, 1000);
+
+
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error);
+                    },
+                });
+            }
+
+            function simpan_linkedit() {
+                var data = {
+                    kategori: $('#pilihkategori').val(),
+                    judul_link: $('#judul_link').val(),
+                    link: $('#link').val()
+                }
+                // console.log(data)
+                $.ajax({
+                    type: 'POST',
+                    url: "<?php echo base_url('link/simpan_link/'); ?>",
+                    data: data,
+                    success: function(response) {
+
+                        if (response == 'berhasil') {
+                            $("#sukses").html("Data berhasil disimpan");
+                            var sukses = new bootstrap.Modal(document.getElementById('modalSukses'));
+
+                            sukses.show();
+                            setTimeout(function() {
+                                sukses.hide();
+                                // view_list_task();
+                                // menggunakan ini untuk modal task yang sudah ditampilkan tapi tidak bisa tertutup
+                                $('#modallink').removeClass('show').hide();
+                                $('.modal-backdrop').remove();
+                                $('#judul_link').val('');
+                                $('#link').val('');
+                                window.location.reload();
+
+                            }, 1000);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error);
+                    },
+                });
+            }
+
+            function edit_link(idlink) {
+                var data = {
+                    idlink: idlink
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: "<?php echo base_url('link/edit_link/');?>",
+                    data: data,
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.status == 1) {
+                            $("#judul_link_edit").val(data.judul_link);
+                            $("#id_link_edit").val(data.idlink);
+                            $("#link_edit").val(data.link);
+
+                            $("#pilihkategori option").each(function() {
+                                if ($(this).val() == data.idkategori) {
+                                    $(this).prop("selected", true);
+                                } else {
+                                    $(this).prop("selected", false);
+                                }
+                            });
+                            var myModal = new bootstrap.Modal(document.getElementById(
+                                'modaleditlink'), {
+                                backdrop: 'static',
+                                keyboard: false
+                            });
+                            myModal.show();
+                        } else {
+                            alert("Task tidak ditemukan!");
+                        }
+                    }
                 });
             }
             </script>
