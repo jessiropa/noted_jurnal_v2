@@ -116,58 +116,81 @@ class Link extends CI_Controller {
 		date_default_timezone_set('Asia/Jakarta');
 		$id_user = $this->session->userdata('id_user');
 		$user_insert = $this->session->userdata('nama');
+		$user_update = $this->session->userdata('nama');
 		$tgl_insert = date('Y-m-d H:i:s');
+		$tgl_update = date('Y-m-d H:i:s');
 		$kategori = $this->input->post('kategori');
 		$judul_link = $this->input->post('judul_link');
 		$url = $this->input->post('link');
+		$id_link = $this->input->post('id_link');
 
-		// membuat id kategori 
-		// ambil id terakhir dari tabel kategori 
-		$get_data = $this->db->query("SELECT 
-        ID_LINK
-        FROM nj_link
-        ORDER BY ID_LINK DESC
-		-- ORDER BY CAST(SUBSTRING(ID_LINK, 4) AS UNSIGNED) DESC 
-        LIMIT 1");
+		$cek_data = $this->db->query("SELECT * FROM nj_link WHERE ID_LINK = '$id_link' AND STATUS_SIMPAN = 'BARU'");
+		if($cek_data->num_rows() > 0){
+			$this->db->query("UPDATE nj_link SET STATUS_SIMPAN = 'REVISI', WAKTU_UPDATE = '$tgl_update', USER_UPDATE = '$user_update' WHERE ID_LINK = '$id_link' AND STATUS_SIMPAN ='BARU'");
+			
+			$lnk['ID_LINK'] = $id_link;
+			$lnk['ID_KATEGORI'] = $kategori;
+			$lnk['JUDUL_LINK'] = $judul_link;
+			$lnk['URL'] = $url;
+			$lnk['ID_USERS'] = $id_user;
+			$lnk['STATUS_SIMPAN'] = 'BARU';
+			$lnk['USER_INSERT'] = $user_insert;
+			$lnk['WAKTU_INSERT'] = $tgl_insert;
 
-		if($get_data->num_rows() > 0){
-			$get_idlink = $get_data->row()->ID_LINK;
-			// var_dump('ada data');
+			$this->db->insert('nj_link', $lnk);
+
+			echo 'berhasil';
 		}else{
-			$get_idlink = null;
-			// var_dump('tidak ada data');
+
+			// membuat id kategori 
+			// ambil id terakhir dari tabel kategori 
+			$get_data = $this->db->query("SELECT 
+			ID_LINK
+			FROM nj_link
+			ORDER BY ID_LINK DESC
+			-- ORDER BY CAST(SUBSTRING(ID_LINK, 4) AS UNSIGNED) DESC 
+			LIMIT 1");
+	
+			if($get_data->num_rows() > 0){
+				$get_idlink = $get_data->row()->ID_LINK;
+				// var_dump('ada data');
+			}else{
+				$get_idlink = null;
+				// var_dump('tidak ada data');
+			}
+	
+			// buat id kategori 
+			if($get_idlink){
+				// var_dump('ada data');
+				// jika ada 
+				$num = (int) substr($get_idlink, 3);
+				$num++;
+				$new_id = 'LNK'.str_pad($num, 4, '0', STR_PAD_LEFT);
+			}else{
+				// var_dump('tidak ada data');
+				// jika tidak ada
+				$new_id = 'LNK0001';
+			}
+	
+			// print_r($get_data);
+	
+			// var_dump($new_id, $get_idlink, $get_data);
+	
+			// // insert database
+			$lnk['ID_LINK'] = $new_id;
+			$lnk['ID_KATEGORI'] = $kategori;
+			$lnk['JUDUL_LINK'] = $judul_link;
+			$lnk['URL'] = $url;
+			$lnk['ID_USERS'] = $id_user;
+			$lnk['STATUS_SIMPAN'] = 'BARU';
+			$lnk['USER_INSERT'] = $user_insert;
+			$lnk['WAKTU_INSERT'] = $tgl_insert;
+	
+			$this->db->insert('nj_link', $lnk);
+	
+			echo 'berhasil';
 		}
 
-		// buat id kategori 
-		if($get_idlink){
-			// var_dump('ada data');
-			// jika ada 
-			$num = (int) substr($get_idlink, 3);
-            $num++;
-            $new_id = 'LNK'.str_pad($num, 4, '0', STR_PAD_LEFT);
-		}else{
-			// var_dump('tidak ada data');
-			// jika tidak ada
-			$new_id = 'LNK0001';
-		}
-
-		// print_r($get_data);
-
-		// var_dump($new_id, $get_idlink, $get_data);
-
-		// // insert database
-		$lnk['ID_LINK'] = $new_id;
-		$lnk['ID_KATEGORI'] = $kategori;
-		$lnk['JUDUL_LINK'] = $judul_link;
-		$lnk['URL'] = $url;
-		$lnk['ID_USERS'] = $id_user;
-		$lnk['STATUS_SIMPAN'] = 'BARU';
-		$lnk['USER_INSERT'] = $user_insert;
-		$lnk['WAKTU_INSERT'] = $tgl_insert;
-
-		$this->db->insert('nj_link', $lnk);
-
-		echo 'berhasil';
 
 	}
 
@@ -229,7 +252,7 @@ class Link extends CI_Controller {
 		nl.JUDUL_LINK,
 		-- nl.ID_KATEGORI,
 		nl.ID_LINK,
-		nl.URL,
+		nl.URL as ALAMAT_LINK,
 		nk.ID_KATEGORI,
 		nk.NAMA_KATEGORI
 		FROM 
@@ -244,7 +267,7 @@ class Link extends CI_Controller {
 			$judul_link = $get_link->row()->JUDUL_LINK;
 			$id_kategori = $get_link->row()->ID_KATEGORI;
 			$nama_kategori = $get_link->row()->NAMA_KATEGORI;
-			$url = $get_link->row()->URL;
+			$url = $get_link->row()->ALAMAT_LINK;
 			$status = '1';
 		}else{
 			$id_kategori = '';
