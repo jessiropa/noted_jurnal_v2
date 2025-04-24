@@ -17,7 +17,7 @@ class Project extends CI_Controller {
 	{
 		// load session user yang login
 		$data['username'] = $this->session->userdata('username');
-		$data['nama'] = $this->session->userdata('nama');
+		$data['nama'] = $this->session->userdata('nama'); 
     	$data['level'] = $this->session->userdata('level');
     	$data['id_user'] = $this->session->userdata('id_user');
 		// $this->template->load('template', 'project/v_project', $data);
@@ -56,7 +56,11 @@ class Project extends CI_Controller {
 		$project = "";
 		if($get_project->num_rows() > 0) {
 
+
 			foreach($get_project->result_array() as $row_project){
+				$pj = $row_project['ID_PROJECTS'];
+				$task_query = $this->db->query("SELECT COUNT(ID_TASK) AS jumlah_task FROM nj_tasks WHERE ID_PROJECTS = '$pj' AND STATUS_SIMPAN = 'BARU'");
+				$task_jumlah = $task_query->row()->jumlah_task;
 						$project .= '<div class="preview-item border-bottom">
 						<div class="preview-thumbnail">
 							<div class="preview-icon bg-primary">
@@ -69,11 +73,10 @@ class Project extends CI_Controller {
 									<a href="'. base_url('project/detail_task/'.$row_project['ID_PROJECTS'].'/'.$iduser).'" style="color: white; text-decoration: none;">'.$row_project['NAMA_PROJECT'].'</a>
 								</h6>
 								<p class="text-muted mb-0">
-									30 tasks, 5 issues
-								</p>
-								<p class="text-muted mb-0">
 									'.$row_project['DESKRIPSI_PROJECT'].'
-								</p>
+								</p> <br>
+								
+								
 							</div>
 							<div class="mr-auto text-sm-right pt-2 pt-sm-0">';
 						// hitung waktu 
@@ -99,6 +102,9 @@ class Project extends CI_Controller {
 							$waktu = date('d M Y', $convert_waktu);// Format tanggal misalnya: 20 Sep 2024
 						}
 						$project .= '<p class="text-muted">'.$waktu.'</p>
+								<p class="text-muted mb-0">
+									'.$task_jumlah.' tasks
+								</p>
 							</div>
 						</div>
 					</div>';
@@ -119,17 +125,7 @@ class Project extends CI_Controller {
 	function detail_task($idproject, $iduser){
 		$data['nama'] = $this->session->userdata('nama');
     	$data['level'] = $this->session->userdata('level');
-		// $get_detail = $this->db->query("SELECT 
-		// np.NAMA_PROJECT,
-		// ndp.DESKRIPSI_PROJECT,
-		// ndp.STATUS_PROJECT,
-		// ndp.DEADLINE_PROJECT,
-		// ndp.TANGGAL_PROJECT
-		// FROM nj_project np
-		// LEFT JOIN nj_deksripsi_project ndp ON np.ID_PROJECTS = ndp.ID_PROJECT
-		// WHERE np.ID_PROJECTS = '$idproject'
-		// AND np.STATUS_SIMPAN = 'BARU'
-		// AND np.ID_USERS = '$iduser'");
+
 		$get_detail = $this->db->query("SELECT 
 		pj.ID_PROJECTS,
 		pj.NAMA_PROJECT,

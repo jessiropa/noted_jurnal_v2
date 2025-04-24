@@ -701,34 +701,34 @@
             'todos_status[]': todo_status
         }
 
-        console.log(data);
-        // $.ajax({
-        //     type: 'POST',
-        //     url: "<?php
-        //     echo base_url('task/simpan_task/');
-        //     ?>",
-        //     data: data,
-        //     success: function(response) {
+        // console.log(data);
+        $.ajax({
+            type: 'POST',
+            url: "<?php
+            echo base_url('task/simpan_task/');
+            ?>",
+            data: data,
+            success: function(response) {
 
-        //         if (response == 'berhasil') {
-        //             $("#sukses").html("Data berhasil disimpan");
-        //             var sukses = new bootstrap.Modal(document.getElementById('modalSukses'));
+                if (response == 'berhasil') {
+                    $("#sukses").html("Data berhasil disimpan");
+                    var sukses = new bootstrap.Modal(document.getElementById('modalSukses'));
 
-        //             sukses.show();
-        //             setTimeout(function() {
-        //                 sukses.hide();
-        //                 view_list_task();
-        //                 window.location.reload();
-        //                 // menggunakan ini untuk modal task yang sudah ditampilkan tapi tidak bisa tertutup
-        //                 $('#modaltambah_task').removeClass('show').hide();
-        //                 $('.modal-backdrop').remove();
-        //             }, 1000);
-        //         }
-        //     },
-        //     error: function(xhr, status, error) {
-        //         console.log(error);
-        //     },
-        // });
+                    sukses.show();
+                    setTimeout(function() {
+                        sukses.hide();
+                        view_list_task();
+                        window.location.reload();
+                        // menggunakan ini untuk modal task yang sudah ditampilkan tapi tidak bisa tertutup
+                        $('#modaltambah_task').removeClass('show').hide();
+                        $('.modal-backdrop').remove();
+                    }, 1000);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log(error);
+            },
+        });
     }
 
     function view_list_task() {
@@ -873,53 +873,6 @@
         $(el).closest('li').remove();
     }
 
-    // function simpan_edit_task() {
-    //     // console.log('simpan edit task');
-    //     idpj = '<?php echo $idpj; ?>';
-    //     kategori = $("input[name ='edit_kategori']:checked").val();
-    //     prioritas = $("input[name ='edit_prioritas']:checked").val();
-    //     progres = $("input[name ='edit_progres']:checked").val();
-
-    //     var data = {
-    //         idpj: idpj,
-    //         kategori: kategori,
-    //         prioritas: prioritas,
-    //         progres: progres,
-    //         task: $('#edit_judul').val(),
-    //         deskripsi: $('#edit_deskripsi').val(),
-    //         deadline: $('#edit_deadline').val(),
-    //         idtask: $('#idtask_edit').val()
-    //     }
-
-    //     // console.log(data);
-    //     $.ajax({
-    //         type: 'POST',
-    //         url: "<?php
-    //         echo base_url('task/simpan_edit_task/');
-    //         ?>",
-    //         data: data,
-    //         success: function(response) {
-
-    //             if (response == 'berhasil') {
-    //                 $("#sukses").html("Data berhasil disimpan");
-    //                 var sukses = new bootstrap.Modal(document.getElementById('modalSukses'));
-
-    //                 sukses.show();
-    //                 setTimeout(function() {
-    //                     sukses.hide();
-    //                     view_list_task();
-    //                     // menggunakan ini untuk modal task yang sudah ditampilkan tapi tidak bisa tertutup
-    //                     $('#modaledit_task').removeClass('show').hide();
-    //                     $('.modal-backdrop').remove();
-    //                 }, 1000);
-    //             }
-    //         },
-    //         error: function(xhr, status, error) {
-    //             console.log(error);
-    //         },
-    //     });
-    // }
-
     function simpan_edit_task() {
         var todos = [];
         $('#todolist_edit li').each(function() {
@@ -942,14 +895,14 @@
         kategori = $("input[name ='edit_kategori']:checked").val();
         prioritas = $("input[name ='edit_prioritas']:checked").val();
         progres = $("input[name ='edit_progres']:checked").val();
+        idpj = '<?php echo $idpj; ?>';
 
         var data = {
-            // idpj: idpj,
+            idpj: idpj,
             kategori: kategori,
             prioritas: prioritas,
             progres: progres,
             task: $('#edit_judul').val(),
-            idpj: $('#idpj').val(),
             deskripsi: $('#edit_deskripsi').val(),
             deadline: $('#edit_deadline').val(),
             idtask: $('#idtask_edit').val(),
@@ -957,11 +910,11 @@
             'todos_status[]': todo_status
         }
 
+        // console.log(data);
+
         $.ajax({
             type: 'POST',
-            url: "<?php
-            echo base_url('task/simpan_edit_task/');
-            ?>",
+            url: "<?php echo base_url('task/simpan_edit_task/'); ?>",
             data: data,
             success: function(response) {
 
