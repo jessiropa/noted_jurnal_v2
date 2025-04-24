@@ -70,10 +70,10 @@ class Project extends CI_Controller {
 						<div class="preview-item-content d-sm-flex flex-grow">
 							<div class="flex-grow">
 								<h6 class="preview-subject">
-									<a href="'. base_url('project/detail_task/'.$row_project['ID_PROJECTS'].'/'.$iduser).'" style="color: white; text-decoration: none;">'.$row_project['NAMA_PROJECT'].'</a>
+									<a href="'. base_url('project/detail_task/'.$row_project['ID_PROJECTS'].'/'.$iduser).'" style="color: white; text-decoration: none;">'.ucwords(strtolower($row_project['NAMA_PROJECT'])).'</a>
 								</h6>
 								<p class="text-muted mb-0">
-									'.$row_project['DESKRIPSI_PROJECT'].'
+									'.ucwords(strtolower($row_project['DESKRIPSI_PROJECT'])).'
 								</p> <br>
 								
 								
