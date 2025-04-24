@@ -43,6 +43,8 @@ class Task extends CI_Controller {
 		$user_insert = $this->session->userdata('nama');
 		$id_user = $this->session->userdata('id_user');
 		$tgl_insert = date('Y-m-d H:i:s');
+		$todos = $this->input->post('todos');
+		$statuses = $this->input->post('todos_status');
 
 		// ambil id terakhir di tabel task 
 		$get_data = $this->db->query("SELECT 
@@ -83,6 +85,50 @@ class Task extends CI_Controller {
 		$ts['ID_USERS'] = $id_user;
 		
 		$this->db->insert('nj_tasks', $ts);
+
+		// if ($todos && $statuses && is_array($todos)) {
+		// 	for ($i = 0; $i < count($todos); $i++) {
+		// 		$todo_data = [
+		// 			'ID_TASK' => $new_id,
+		// 			'NAMA_TODO'    => $todos[$i],
+		// 			'IS_DONE'  => $statuses[$i] == 1 ? 1 : 0,
+		// 			'WAKTU_INSERT' => $tgl_insert,
+		// 			'USER_INSERT' => $user_insert,
+		// 			'ID_USER' => $id_user,
+		// 			'STATUS_SIMPAN' => 'BARU',
+		// 		];
+		// 		$this->db->insert('nj_todolist', $todo_data);
+		// 	}
+		// }
+		// Simpan ToDo jika ada
+		if ($todos && $statuses && is_array($todos)) {
+			// ambil id terakhir dari todo
+			$get_last_todo = $this->db->query("SELECT ID_TODO_TASK FROM nj_todolist ORDER BY ID_TODO_TASK DESC LIMIT 1");
+			if($get_last_todo->num_rows() > 0){
+				$last_todo_id = $get_last_todo->row()->ID_TODO_TASK;
+				$num = (int) substr($last_todo_id, 2);
+			}else{
+				$num = 0;
+			}
+
+			// insert todos
+			for ($i = 0; $i < count($todos); $i++) {
+				$num++;
+				$new_todo_id = 'TD' . str_pad($num, 4, '0', STR_PAD_LEFT);
+				$todo_data = [
+					'ID_TODO_TASK' => $new_todo_id,
+					'ID_TASK' => $new_id,
+					'NAMA_TODO' => $todos[$i],
+					'IS_DONE' => $statuses[$i] == 1 ? 1 : 0,
+					'WAKTU_INSERT' => $tgl_insert,
+					'USER_INSERT' => $user_insert,
+					'ID_USER' => $id_user,
+					'STATUS_SIMPAN' => 'BARU'
+				];
+				$this->db->insert('nj_todolist', $todo_data);
+			}
+		}
+
 
 		echo 'berhasil';
 	}
@@ -139,6 +185,7 @@ class Task extends CI_Controller {
 		$tgl_update = date('Y-m-d H:i:s');
 
 		$this->db->query("UPDATE nj_tasks SET STATUS_SIMPAN = 'HAPUS', WAKTU_UPDATE = '$tgl_update', USER_UPDATE = '$user_update' WHERE ID_TASK = '$idtask' AND STATUS_SIMPAN ='BARU'");
+		$this->db->query("UPDATE nj_todolist SET STATUS_SIMPAN = 'HAPUS', WAKTU_UPDATE = '$tgl_update', USER_UPDATE = '$user_update' WHERE ID_TASK = '$idtask' AND STATUS_SIMPAN ='BARU'");
 		echo 'berhasil'; 
 	}
 
@@ -182,6 +229,8 @@ class Task extends CI_Controller {
 			$status = '0';
 		}
 
+		$get_todo = $this->db->query("SELECT * FROM nj_todolist WHERE ID_TASK = '$idtask' AND STATUS_SIMPAN = 'BARU'")->result();
+
 		echo json_encode([
 			'judul' => $judul_task,
 			'id_task' => $id_task,
@@ -191,7 +240,8 @@ class Task extends CI_Controller {
 			'prioritas' => $prioritas,
 			'progres' => $progres,
 			'idpj' => $idpj,
-			'status' => $status
+			'status' => $status,
+			'todolist' => $get_todo
 		]);
 	}
 
@@ -205,6 +255,8 @@ class Task extends CI_Controller {
 		$task = $this->input->post('task');
 		$deskripsi = $this->input->post('deskripsi');
 		$deadline = $this->input->post('deadline');
+		$todos = $this->input->post('todos');
+		$todos_status = $this->input->post('todos_status');
 		$user_insert = $this->session->userdata('nama');
 		$user_update = $this->session->userdata('nama');
 		$id_user = $this->session->userdata('id_user');
@@ -215,6 +267,21 @@ class Task extends CI_Controller {
 		$get_task = $this->db->query("SELECT * FROM nj_tasks WHERE ID_tASK = '$idtask' AND STATUS_SIMPAN ='BARU'");
 		if($get_task->num_rows() > 0){
 			$this->db->query("UPDATE nj_tasks SET STATUS_SIMPAN = 'REVISI', WAKTU_UPDATE = '$tgl_update', USER_UPDATE = '$user_update' WHERE ID_tASK = '$idtask' AND STATUS_SIMPAN ='BARU'");
+			// insert database
+			$ts['ID_TASK'] = $idtask;
+			$ts['ID_PROJECTS'] = $idpj;
+			$ts['JUDUL_TASK'] = $task;
+			$ts['DESKRIPSI'] = $deskripsi;
+			$ts['KATEGORI_TASK'] = $kategori;
+			$ts['PRIORITAS'] = $prioritas;
+			$ts['PROGRES'] = $progres;
+			$ts['STATUS_SIMPAN'] = 'BARU';
+			$ts['WAKTU_INSERT'] = $tgl_insert;
+			$ts['USER_INSERT'] = $user_insert;
+			$ts['DEADLINE'] = $deadline;
+			$ts['ID_USERS'] = $id_user;
+			
+			$this->db->insert('nj_tasks', $ts);
 		}
 
 		// insert database
@@ -232,6 +299,35 @@ class Task extends CI_Controller {
 		$ts['ID_USERS'] = $id_user;
 		
 		$this->db->insert('nj_tasks', $ts);
+
+
+		// ambil todo sebelumnya
+		$get_todo = $this->db->query("SELECT * FROM nj_todolist WHERE ID_TASK = '$idtask' AND STATUS_SIMPAN = 'BARU' ORDER BY ID_TODO_TASK ASC");
+		$todo_lama = $get_todo->result_array();
+
+		// update status todo sebelumnya menjadi revisi
+		$this->db->query("UPDATE nj_todolist SET STATUS_SIMPAN = 'REVISI', WAKTU_UPDATE = '$tgl_update', USER_UPDATE = '$user_update' WHERE ID_TASK = '$idtask' AND STATUS_SIMPAN = 'BARU'");
+
+		// insert todos yang baru
+		if (!empty($todos)) {
+			foreach ($todos as $index => $todo_nama) {
+				if (trim($todo_nama) != '') {
+					$todolist = array(
+						'ID_TODO_TASK' => isset($todo_lama[$index]['ID_TODO_TASK']) ? $todo_lama[$index]['ID_TODO_TASK'] : uniqid('TD'),
+						'ID_TASK' => $idtask,
+						'NAMA_TODO' => $todo_nama,
+						'IS_DONE' => isset($todos_status[$index]) ? $todos_status[$index] : 0,
+						'WAKTU_INSERT' => $tgl_insert,
+						'USER_INSERT' => $user_insert,
+						'ID_USER' => $id_user,
+						'STATUS_SIMPAN' => 'BARU'
+					);
+					$this->db->insert('nj_todolist', $todolist);
+				}
+			}
+		}
+
+
 
 		echo 'berhasil';
 	}

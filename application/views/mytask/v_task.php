@@ -24,49 +24,6 @@
                         </nav>
                     </div>
                     <div class="row">
-                        <div class="col-12 grid-margin stretch-card">
-                            <div class="card">
-                                <div class="card-body">
-                                    <form class="form-inline">
-                                        <label class="sr-only" for="inlineFormInputName2">Name</label>
-                                        <input type="text" class="form-control mb-2 mr-sm-2" id="inlineFormInputName2"
-                                            placeholder="Nama Task">
-                                        <label class="sr-only" for="inlineFormInputGroupUsername2">Username</label>
-                                        <div class="input-group mb-2 mr-sm-2">
-                                            <select class="form-control">
-                                                <option>Hallo Project</option>
-                                                <option>Rival Project</option>
-                                                <option>jessi project</option>
-                                            </select>
-                                        </div>
-                                        <div class="input-group mb-2 mr-sm-2">
-                                            <select class="form-control">
-                                                <option>Penulisan</option>
-                                                <option>Penelitian</option>
-                                                <option>Revisi</option>
-                                            </select>
-                                        </div>
-                                        <div class="input-group mb-2 mr-sm-2">
-                                            <select class="form-control">
-                                                <option>Tinggi</option>
-                                                <option>Sedang</option>
-                                                <option>Rendah</option>
-                                            </select>
-                                        </div>
-                                        <div class="input-group mb-2 mr-sm-2">
-                                            <select class="form-control">
-                                                <option>Belum Dikerjakan</option>
-                                                <option>Sedang Dikerjakan</option>
-                                                <option>Selesai</option>
-                                            </select>
-                                        </div>
-                                        <button type="submit" class="btn btn-info mb-2">Submit</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="col-12 grid-margin">
                             <div class="card">
                                 <div class="card-body">
@@ -134,6 +91,47 @@
                 </div>
                 <div class="modal fade" id="modaledit_task" data-backdrop="static" data-keyboard="false" tabindex="-1"
                     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <style>
+                    /* Gaya khusus untuk checkbox di dalam modal edit todolist */
+                    #modaledit_task .list-wrapper ul#todolist_edit li .form-check .checkbox {
+                        display: block !important;
+                        width: auto !important;
+                        height: auto !important;
+                        opacity: 1 !important;
+                        visibility: visible !important;
+                        margin-right: 5px;
+                    }
+
+                    /* Gaya untuk label todolist yang sudah selesai (dicoret dan warna) di modal edit */
+                    #modaledit_task .list-wrapper ul#todolist_edit li.completed .form-check .form-check-label {
+                        text-decoration: line-through;
+                        text-decoration-color: #007bff;
+                        color: #888;
+                    }
+
+                    /* Gaya untuk ikon remove todolist yang sudah selesai (warna biru) di modal edit */
+                    #modaledit_task .list-wrapper ul#todolist_edit li.completed .remove {
+                        color: #007bff !important;
+                        cursor: pointer;
+                    }
+
+                    /* Gaya untuk ikon remove todolist secara umum di modal edit */
+                    #modaledit_task .list-wrapper ul#todolist_edit li .remove {
+                        color: #6c757d;
+                        cursor: pointer;
+                    }
+
+                    /* Gaya untuk label todolist yang sudah selesai (dicoret dan warna) di fitur tambah baru */
+                    #todoList li.completed .form-check .form-check-label {
+                        text-decoration: line-through;
+                        text-decoration-color: #007bff;
+                        color: #888;
+                    }
+
+                    input[type="checkbox"]:not(:checked) {
+                        border-color: #007bff;
+                    }
+                    </style>
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -265,6 +263,22 @@
                                                         Selesai</label>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="card-body">
+                                        <h4 class="card-title">Edit To-do List</h4>
+                                        <div class="add-items d-flex">
+                                            <input type="text" class="form-control todo-list-input"
+                                                id="todolist_input_edit" placeholder="enter task.." />
+                                            <button type="button" class="add btn btn-primary todo-list-add-btn"
+                                                onclick="addTodoItemEdit()">Add</button>
+                                        </div>
+                                        <div class="list-wrapper mt-2">
+                                            <ul id="todolist_edit"
+                                                class="d-flex flex-column-reverse text-white todo-list todo-list-custom">
+                                            </ul>
                                         </div>
                                     </div>
                                 </div><br>
@@ -430,7 +444,24 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="row">
+                                    <div class="card-body">
+                                        <h4 class="card-title">To do list</h4>
+                                        <div class="add-items d-flex">
+                                            <input type="text" class="form-control todo-list-input" id="inputTodo"
+                                                placeholder="Masukkan to do list ..." />
+                                            <button class="add btn btn-primary todo-list-add-btn" type="button"
+                                                onclick="addTodoItem()">Add</button>
+                                        </div>
+                                        <div class="list-wrapper">
+                                            <ul class="d-flex flex-column-reverse text-white todo-list todo-list-custom"
+                                                id="todoList">
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div><br>
+                                <br>
 
                             </div>
                             <div class="modal-footer">
@@ -483,7 +514,7 @@
                     // $('#modalSukses').modal('show');
                     setTimeout(function() {
                         sukses.hide();
-                        // window.location.reload();
+                        window.location.reload();
                         view_list_task();
                     }, 1000);
 
@@ -545,17 +576,41 @@
                     $("#edit_deskripsi").val(data.deskripsi);
                     $("#edit_deadline").val(data.deadline);
                     $("#idpj").val(data.idpj);
-                    $("input[name='edit_kategori'][value='" + data.kategori + "']").prop("checked",
-                        true);
-                    $("input[name='edit_prioritas'][value='" + data.prioritas + "']").prop("checked",
-                        true);
-                    $("input[name='edit_progres'][value='" + data.progres + "']").prop("checked",
-                        true);
+                    $("input[name='edit_kategori'][value='" + data.kategori + "']").prop("checked", true);
+                    $("input[name='edit_prioritas'][value='" + data.prioritas + "']").prop("checked", true);
+                    $("input[name='edit_progres'][value='" + data.progres + "']").prop("checked", true);
+                    let todosHtml = '';
+                    data.todolist.forEach(function(todo) {
+                        const isChecked = todo.IS_DONE == 1 ? 'checked' : '';
+                        const completedClass = todo.IS_DONE == 1 ? 'completed' :
+                            ''; // Tambahkan class completed
+
+                        todosHtml += `
+                    <li class="${completedClass}">
+                        <div class='form-check form-check-primary'>
+                            <label class='form-check-label'>
+                                <input class='checkbox' type='checkbox' ${isChecked} />
+                                ${todo.NAMA_TODO}
+                            </label>
+                        </div>
+                        <i class='remove mdi mdi-close-box' onclick='removeTodo(this)'></i>
+                    </li>`;
+                    });
+                    $('#todolist_edit').html(todosHtml);
                     var myModal = new bootstrap.Modal(document.getElementById('modaledit_task'), {
                         backdrop: 'static',
                         keyboard: false
                     });
                     myModal.show();
+
+                    // Event listener untuk menandai todo sebagai selesai/belum selesai (fitur edit)
+                    $('#modaledit_task').off('shown.bs.modal').on('shown.bs.modal', function() {
+                        $('#todolist_edit').off('change', '.checkbox').on('change', '.checkbox',
+                            function() {
+                                var listItem = $(this).closest('li');
+                                listItem.toggleClass('completed', this.checked);
+                            });
+                    });
                 } else {
                     alert("Task tidak ditemukan!");
                 }
@@ -564,6 +619,24 @@
     }
 
     function simpan_edit_task() {
+        var todos = [];
+        $('#todolist_edit li').each(function() {
+            var text = $(this).find('label').text().trim();
+            var isChecked = $(this).find('input[type="checkbox"]').is(':checked');
+            todos.push({
+                item: text,
+                done: isChecked
+            });
+        });
+
+        var todo_items = [];
+        var todo_status = [];
+
+        todos.forEach(function(todo) {
+            todo_items.push(todo.item);
+            todo_status.push(todo.done ? 1 : 0);
+        });
+
         kategori = $("input[name ='edit_kategori']:checked").val();
         prioritas = $("input[name ='edit_prioritas']:checked").val();
         progres = $("input[name ='edit_progres']:checked").val();
@@ -577,7 +650,9 @@
             idpj: $('#idpj').val(),
             deskripsi: $('#edit_deskripsi').val(),
             deadline: $('#edit_deadline').val(),
-            idtask: $('#idtask_edit').val()
+            idtask: $('#idtask_edit').val(),
+            'todos[]': todo_items,
+            'todos_status[]': todo_status
         }
 
         $.ajax({
@@ -596,6 +671,7 @@
                     setTimeout(function() {
                         sukses.hide();
                         view_list_task();
+                        window.location.reload();
                         // menggunakan ini untuk modal task yang sudah ditampilkan tapi tidak bisa tertutup
                         $('#modaledit_task').removeClass('show').hide();
                         $('.modal-backdrop').remove();
@@ -617,10 +693,78 @@
         addtask.show();
     }
 
+    function addTodoItem() {
+        var input = $('#inputTodo').val().trim();
+        if (input !== '') {
+            var itemHtml = `
+            <li>
+                <div class='form-check form-check-primary'>
+                    <label class='form-check-label'>
+                        <input class='checkbox' type='checkbox' />
+                        ${input}
+                        <i class='input-helper'></i>
+                    </label>
+                </div>
+                <i class='remove mdi mdi-close-box' onclick='removeTodoItem(this)'></i>
+            </li>
+        `;
+            $('#todoList').prepend(itemHtml);
+            $('#inputTodo').val('');
+        }
+    }
+
+    function removeTodoItem(element) {
+        $(element).closest('li').remove();
+    }
+
+    // Event listener untuk menandai todo sebagai selesai/belum selesai
+    $('#todoList').on('change', '.checkbox', function() {
+        var listItem = $(this).closest('li');
+        var label = listItem.find('.form-check-label');
+        var removeIcon = listItem.find('.remove');
+        var isChecked = $(this).prop('checked');
+        var blueColor = '#007bff'; // Warna biru
+        var defaultTextColor = '';
+
+        if (isChecked) {
+            label.css('text-decoration', 'line-through');
+            label.css('text-decoration-color', blueColor); // Warna garis coretan menjadi biru
+            label.css('color', defaultTextColor); // Warna teks kembali ke default
+            removeIcon.css('color', blueColor);
+            $(this).attr('checked', 'checked');
+        } else {
+            label.css('text-decoration', 'none');
+            label.css('text-decoration-color', ''); // Hapus warna garis coretan
+            label.css('color', defaultTextColor); // Warna teks kembali ke default
+            removeIcon.css('color', ''); // Kembalikan ke warna default
+            $(this).removeAttr('checked');
+        }
+    });
+
+
     function simpan_task() {
         kategori = $("input[name ='kategori_task']:checked").val();
         prioritas = $("input[name ='prioritas']:checked").val();
         progres = $("input[name ='progres']:checked").val();
+
+        var todos = [];
+        $('#todoList li').each(function() {
+            var text = $(this).find('label').text().trim();
+            var isChecked = $(this).find('input[type="checkbox"]').is(':checked');
+            todos.push({
+                item: text,
+                done: isChecked
+            });
+        });
+
+        // Ubah array objek menjadi 2 array sederhana
+        var todo_items = [];
+        var todo_status = [];
+
+        todos.forEach(function(todo) {
+            todo_items.push(todo.item);
+            todo_status.push(todo.done ? 1 : 0);
+        });
 
         var data = {
             kategori: kategori,
@@ -629,7 +773,9 @@
             task: $('#judul_task').val(),
             deskripsi: $('#deskripsi_task').val(),
             deadline: $('#deadline_task').val(),
-            idpj: $('#project').val()
+            idpj: $('#project').val(),
+            'todos[]': todo_items, // array item
+            'todos_status[]': todo_status
         }
 
         // console.log(data);
@@ -649,6 +795,7 @@
                     setTimeout(function() {
                         sukses.hide();
                         view_list_task();
+                        window.location.reload();
                         // menggunakan ini untuk modal task yang sudah ditampilkan tapi tidak bisa tertutup
                         $('#modaltambah_task').removeClass('show').hide();
                         $('.modal-backdrop').remove();
@@ -659,6 +806,28 @@
                 console.log(error);
             },
         });
+    }
+
+    function addTodoItemEdit() {
+        var input = $('#todolist_input_edit').val();
+        if (input.trim() !== '') {
+            var listItem = `
+            <li>
+                <div class="form-check form-check-primary">
+                    <label class="form-check-label">
+                        <input class="checkbox" type="checkbox" />
+                        ${input}
+                    </label>
+                </div>
+                <i class="remove mdi mdi-close-box" onclick="removeTodo(this)"></i>
+            </li>`;
+            $('#todolist_edit').prepend(listItem);
+            $('#todolist_input_edit').val('');
+        }
+    }
+
+    function removeTodo(el) {
+        $(el).closest('li').remove();
     }
     </script>
 
