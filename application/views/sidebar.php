@@ -9,10 +9,10 @@
         <li class="nav-item profile">
             <div class="profile-desc">
                 <div class="profile-pic">
-                    <div class="count-indicator">
+                    <!-- <div class="count-indicator">
                         <img class="img-xs rounded-circle" src="<?=base_url()?>assets/images/faces/face15.jpg" alt="" />
                         <span class="count bg-success"></span>
-                    </div>
+                    </div> -->
                     <div class="profile-name">
                         <h5 class="mb-0 font-weight-normal"><?php echo $nama; ?></h5>
                         <span>Online</span>
