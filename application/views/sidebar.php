@@ -1,9 +1,9 @@
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
         <a class="sidebar-brand brand-logo" href="<?=base_url('beranda')?>"><img
-                src="<?=base_url()?>assets/images/logo.svg" alt="logo" /></a>
+                src="<?=base_url()?>assets/images/transparent.svg" alt="logo" style="width: 150%; " /></a>
         <a class="sidebar-brand brand-logo-mini" href="<?=base_url()?>index.php"><img
-                src="<?=base_url()?>assets/images/logo-mini.svg" alt="logo" /></a>
+                src="<?=base_url()?>assets/images/nj_logo.svg" alt="logo" style="width: 100%;" /></a>
     </div>
     <ul class="nav">
         <li class="nav-item profile">

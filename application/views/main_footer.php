@@ -6,6 +6,6 @@
         </span>
         <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">
             Copyright ©
-            chocobetter.codes<?php echo date("Y"); ?></span>
+            chocobetter.codes - <?php echo date("Y"); ?></span>
     </div>
 </footer>
