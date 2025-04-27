@@ -86,77 +86,7 @@ class Task extends CI_Controller {
 		
 		$this->db->insert('nj_tasks', $ts);
 
-		// if ($todos && $statuses && is_array($todos)) {
-		// 	for ($i = 0; $i < count($todos); $i++) {
-		// 		$todo_data = [
-		// 			'ID_TASK' => $new_id,
-		// 			'NAMA_TODO'    => $todos[$i],
-		// 			'IS_DONE'  => $statuses[$i] == 1 ? 1 : 0,
-		// 			'WAKTU_INSERT' => $tgl_insert,
-		// 			'USER_INSERT' => $user_insert,
-		// 			'ID_USER' => $id_user,
-		// 			'STATUS_SIMPAN' => 'BARU',
-		// 		];
-		// 		$this->db->insert('nj_todolist', $todo_data);
-		// 	}
-		// }
-		// Simpan ToDo jika ada
-		// if ($todos && $statuses && is_array($todos)) {
-		// 	// ambil id terakhir dari todo
-		// 	$get_last_todo = $this->db->query("SELECT ID_TODO_TASK FROM nj_todolist ORDER BY ID_TODO_TASK DESC LIMIT 1");
-		// 	if($get_last_todo->num_rows() > 0){
-		// 		$last_todo_id = $get_last_todo->row()->ID_TODO_TASK;
-		// 		$num = (int) substr($last_todo_id, 2);
-		// 	}else{
-		// 		$num = 0;
-		// 	}
-
-		// 	// insert todos
-		// 	for ($i = 0; $i < count($todos); $i++) {
-		// 		$num++;
-		// 		$new_todo_id = 'TD' . str_pad($num, 4, '0', STR_PAD_LEFT);
-		// 		$todo_data = [
-		// 			'ID_TODO_TASK' => $new_todo_id,
-		// 			'ID_TASK' => $new_id,
-		// 			'NAMA_TODO' => $todos[$i],
-		// 			'IS_DONE' => $statuses[$i] == 1 ? 1 : 0,
-		// 			'WAKTU_INSERT' => $tgl_insert,
-		// 			'USER_INSERT' => $user_insert,
-		// 			'ID_USER' => $id_user,
-		// 			'STATUS_SIMPAN' => 'BARU'
-		// 		];
-		// 		$this->db->insert('nj_todolist', $todo_data);
-		// 	}
-		// }
-		 // Simpan ToDo jika ada
-		//  if ($todos && $statuses && is_array($todos)) {
-		// 	// ambil id terakhir dari todo
-		// 	$get_last_todo = $this->db->query("SELECT ID_TODO_TASK FROM nj_todolist ORDER BY ID_TODO_TASK DESC LIMIT 1");
-		// 	if($get_last_todo->num_rows() > 0){
-		// 		$last_todo_id = $get_last_todo->row()->ID_TODO_TASK;
-		// 		$num = (int) substr($last_todo_id, 2);
-		// 	}else{
-		// 		$num = 0;
-		// 	}
-	
-		// 	// insert todos
-		// 	for ($i = 0; $i < count($todos); $i++) {
-		// 		$num++;
-		// 		$new_todo_id = 'TD' . str_pad($num, 4, '0', STR_PAD_LEFT);
-		// 		$todo_data = [
-		// 			'ID_TODO_TASK' => $new_todo_id,
-		// 			'ID_TASK' => $new_id,
-		// 			'NAMA_TODO' => $todos[$i],
-		// 			'IS_DONE' => $statuses[$i] == 1 ? 1 : 0,
-		// 			'WAKTU_INSERT' => $tgl_insert,
-		// 			'USER_INSERT' => $user_insert,
-		// 			'ID_USER' => $id_user,
-		// 			'STATUS_SIMPAN' => 'BARU'
-		// 		];
-		// 		$this->db->insert('nj_todolist', $todo_data);
-		// 	}
-		// }
-
+		
 		if ($todos && $statuses && is_array($todos)) {
 			// ambil id terakhir dari todo dengan format yang benar
 			$get_last_todo = $this->db->query("SELECT 
@@ -454,9 +384,14 @@ class Task extends CI_Controller {
 						</tr>';
 			}
 		}else{
+			// $tsk .= '<tr>
+			// 				 <td colspan="6" class="text-center">TIDAK ADA TASK</td>
+			// 			</tr>';
+
 			$tsk .= '<tr>
-							 <td colspan="5" class="text-center">TIDAK ADA TASK</td>
-						</tr>';
+				<td class="text-center" colspan="6">TIDAK ADA TASK</td>
+			</tr>';
+
 		}
 		
 		echo $tsk;

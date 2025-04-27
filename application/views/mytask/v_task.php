@@ -54,6 +54,7 @@
                                             </tbody>
                                         </table>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -480,6 +481,7 @@
     <script>
     $(document).ready(function() {
         view_list_task();
+        // console.log("DataTables version: " + $.fn.dataTable.version);
 
     });
 
@@ -528,6 +530,68 @@
     }
 
 
+    // function view_list_task() {
+    //     iduser = '<?php echo $id_user; ?>';
+
+    //     var data = {
+    //         iduser: iduser
+    //     };
+
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: "<?php
+    //   echo base_url('task/all_list_task/');
+    //   ?>",
+    //         data: data,
+    //         success: function(data) {
+    //             if (data.trim() === '') {
+    //                 $('#list_task').html(
+    //                     '<tr><td colspan="6" class="text-center">Belum ada task.</td></tr>'
+    //                 );
+    //             } else {
+    //                 $('#list_task').html(data);
+    //             }
+    //             // $("#list_task").html(data);
+    //             if ($.fn.DataTable.isDataTable('#taskTable')) {
+    //                 $('#taskTable').DataTable().destroy();
+    //             }
+
+
+    //             $('#taskTable').DataTable({
+    //                 "paging": true,
+    //                 "searching": true,
+    //                 "ordering": true,
+    //                 "info": true,
+    //                 "responsive": true,
+    //                 "autoWidth": false,
+    //                 // "retrieve": true,
+    //                 "language": {
+    //                     "emptyTable": "Belum ada data task."
+    //                 },
+    //                 "columns": [{
+    //                         "data": 0
+    //                     }, // Judul Task
+    //                     {
+    //                         "data": 1
+    //                     }, // Nama Project
+    //                     {
+    //                         "data": 2
+    //                     }, // Prioritas
+    //                     {
+    //                         "data": 3
+    //                     }, // Deadline
+    //                     {
+    //                         "data": 4
+    //                     }, // Progress
+    //                     {
+    //                         "data": 5
+    //                     } // Aksi (buttons)
+    //                 ]
+    //             });
+    //         }
+    //     });
+    // }
+
     function view_list_task() {
         iduser = '<?php echo $id_user; ?>';
 
@@ -537,23 +601,29 @@
 
         $.ajax({
             type: 'POST',
-            url: "<?php
-      echo base_url('task/all_list_task/');
-      ?>",
+            url: "<?php echo base_url('task/all_list_task/'); ?>",
             data: data,
             success: function(data) {
-                $("#list_task").html(data);
-
+                console.log(data);
+                // Hancurkan DataTable jika sudah ada
                 if ($.fn.DataTable.isDataTable('#taskTable')) {
                     $('#taskTable').DataTable().destroy();
                 }
+
+                // Set HTML dari respons server
+                $("#list_task").html(data);
+
+                // Inisialisasi DataTable setelah HTML di-update
                 $('#taskTable').DataTable({
                     "paging": true,
                     "searching": true,
                     "ordering": true,
                     "info": true,
                     "responsive": true,
-                    "autoWidth": false
+                    "autoWidth": false,
+                    "language": {
+                        "emptyTable": "Belum ada data task."
+                    }
                 });
             }
         });

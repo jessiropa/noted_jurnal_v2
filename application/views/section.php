@@ -9,6 +9,8 @@
         </button>
         <ul class="navbar-nav w-100">
             <li class="nav-item w-100">
+                <div id="clock" style="font-size: 24px; font-weight: bold;"></div>
+
                 <!-- <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
                     <input type="text" class="form-control" placeholder="Search products" />
                 </form> -->
@@ -61,3 +63,22 @@
         </button>
     </div>
 </nav>
+
+<script>
+function updateClock() {
+    var now = new Date();
+    var hours = now.getHours().toString().padStart(2, '0');
+    var minutes = now.getMinutes().toString().padStart(2, '0');
+    var seconds = now.getSeconds().toString().padStart(2, '0');
+
+    var currentTime = hours + ':' + minutes + ':' + seconds;
+
+    document.getElementById('clock').innerText = currentTime;
+}
+
+// Update setiap 1 detik
+setInterval(updateClock, 1000);
+
+// Panggil sekali waktu halaman dibuka
+updateClock();
+</script>

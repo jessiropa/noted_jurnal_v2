@@ -45,100 +45,12 @@
                     <div class="row">
                         <div class="col-lg-12 grid-margin stretch-card">
                             <div class="card">
-
-                                <!-- <div class="card-body">
-                                    <h4 class="card-title">All My Link</h4>
-                                    <p class="card-description"> Your Link </p>
-                                    <hr style="border: 1px solid white;">
-                                    <ul class="nav flex-column">
-                                        <?php
-                                        $link_before = null;
-
-                                        foreach ($referensi->result_array() as $rf) :
-                                            if ($link_before !== $rf['ID_KATEGORI'] && $link_before !== null) :
-                                                echo "</ul></div></li>";
-                                            endif;
-                                            if ($link_before !== $rf['ID_KATEGORI']) :
-                                        ?>
-                                        <li class="nav-item menu-items">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <a class="nav-link" data-toggle="collapse"
-                                                    href="#refKategori<?= $rf['ID_KATEGORI']; ?>" aria-expanded="false"
-                                                    aria-controls="refKategori<?= $rf['ID_KATEGORI']; ?>">
-                                                    <span class="menu-title">📂
-                                                        <?= strtoupper($rf['NAMA_KATEGORI']); ?></span>
-                                                    <i class="menu-arrow"></i>
-                                                </a>
-                                                <div class="dropdown">
-                                                    <button class="btn btn-sm btn-link text-light dropdown-toggle"
-                                                        type="button" id="dropdownMenuButton<?= $rf['ID_KATEGORI']; ?>"
-                                                        data-toggle="dropdown" aria-haspopup="true"
-                                                        aria-expanded="false" style="text-decoration: none;">
-                                                        ⋮
-                                                    </button>
-                                                    <div class="dropdown-menu dropdown-menu-right"
-                                                        aria-labelledby="dropdownMenuButton<?= $rf['ID_KATEGORI']; ?>">
-                                                        <a class="dropdown-item" href="javascript:void(0)"
-                                                            onclick="edit_kategori('<?= $rf['ID_KATEGORI']; ?>', '<?= $rf['NAMA_KATEGORI']; ?>')">✏️
-                                                            Edit</a>
-                                                        <a class="dropdown-item text-danger" href="javascript:void(0)"
-                                                            onclick="konfirmasi_hapus_kategori('<?= $rf['ID_KATEGORI']; ?>', '<?= $rf['NAMA_KATEGORI']; ?>')">❌
-                                                            Hapus</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="collapse" id="refKategori<?= $rf['ID_KATEGORI']; ?>">
-                                                <ul class="nav flex-column sub-menu">
-                                                    <?php endif; ?>
-
-                                                    <li
-                                                        class="nav-item d-flex justify-content-between align-items-center">
-                                                        <a class="nav-link" href="<?= $rf['URL']; ?>" target="_blank">
-                                                            📌 <?= ucwords(strtolower($rf['JUDUL_LINK'])); ?>
-                                                        </a>
-                                                        <div>
-                                                            <button type="button" class="btn btn-warning btn-sm"
-                                                                onclick="edit_link('<?= $rf['ID_LINK']; ?>')">✏️</button>
-                                                            <button type="button" class="btn btn-danger btn-sm"
-                                                                onclick="konfirmasi_hapus_link('<?= $rf['ID_LINK']; ?>', '<?= $rf['JUDUL_LINK']; ?>')">❌</button>
-                                                        </div>
-                                                    </li>
-
-                                                    <?php
-                                                        $link_before = $rf['ID_KATEGORI'];
-                                                    endforeach;
-
-                                                    if ($link_before !== null) :
-                                                        echo "</ul></div></li>";
-                                                    endif;
-                                                    ?>
-                                                </ul>
-
-                                                <hr style="border: 1px solid white;">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <button type="button"
-                                                            class="btn btn-primary btn-icon-text btn-lg"
-                                                            onclick="tambah_kategori()">
-                                                            + Tambah Kategori
-                                                        </button>
-                                                        <button type="button" class="btn btn-info btn-icon-text btn-lg"
-                                                            onclick="tambah_link()">
-                                                            + Tambah Link
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-
-                                </div> -->
                                 <div class="card-body">
                                     <h4 class="card-title">All My Link</h4>
                                     <p class="card-description"> Your Link </p>
                                     <hr style="border: 1px solid white;">
                                     <ul class="nav flex-column">
+                                        <?php if ($kategori->num_rows() > 0): ?>
                                         <?php foreach ($kategori->result_array() as $ktg): ?>
                                         <li class="nav-item menu-items">
                                             <div class="d-flex justify-content-between align-items-center">
@@ -171,11 +83,11 @@
                                             <div class="collapse" id="refKategori<?= $ktg['ID_KATEGORI']; ?>">
                                                 <ul class="nav flex-column sub-menu">
                                                     <?php
-                                                        $hasLink = false;
-                                                        foreach ($referensi->result_array() as $rf) {
-                                                            if ($rf['ID_KATEGORI'] === $ktg['ID_KATEGORI']) {
-                                                                $hasLink = true;
-                                                    ?>
+                        $hasLink = false; // Reset $hasLink di setiap iterasi kategori
+                        foreach ($referensi->result_array() as $rf) {
+                            if ($rf['ID_KATEGORI'] === $ktg['ID_KATEGORI']) {
+                                $hasLink = true;
+                    ?>
                                                     <li
                                                         class="nav-item d-flex justify-content-between align-items-center">
                                                         <a class="nav-link" href="<?= $rf['URL']; ?>" target="_blank">
@@ -189,16 +101,21 @@
                                                         </div>
                                                     </li>
                                                     <?php
-                                                            }
-                                                        }
-                                                        if (!$hasLink) {
-                                                            echo '<li class="nav-item"><span class="text-muted px-3">📭 Tidak ada link</span></li>';
-                                                        }
-                                                    ?>
+                            }
+                        }
+                        if (!$hasLink) {
+                            echo '<li class="nav-item"><span class="text-muted px-3">📭 Tidak ada link</span></li>';
+                        }
+                    ?>
                                                 </ul>
                                             </div>
                                         </li>
                                         <?php endforeach; ?>
+                                        <?php else: ?>
+                                        <li class="nav-item">
+                                            <span class="text-muted px-3">📭 Tidak ada kategori</span>
+                                        </li>
+                                        <?php endif; ?>
                                     </ul>
 
                                     <hr style="border: 1px solid white;">
@@ -215,7 +132,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
 
                         </div>
