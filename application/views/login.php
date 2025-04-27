@@ -49,7 +49,8 @@
                                     <button type="submit" class="btn btn-primary btn-block enter-btn"
                                         name="login">Login</button>
                                 </div>
-                                <p class="sign-up">Don't have an Account?<a href="#"> Sign Up</a></p>
+                                <p class="sign-up">Belum memiliki akun ? <a
+                                        href="<?php echo site_url('auth/registrasi'); ?>"> Registrasi</a></p>
                             </form>
                         </div>
                     </div>

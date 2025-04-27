@@ -54,6 +54,52 @@ class Auth extends CI_Controller {
 
 	}
 
+	public function registrasi(){
+		$this->load->view('registrasi');
+	}
+
+	public function simpan_regis(){
+		$nama = $this->input->post('reg_nama');
+		$username = $this->input->post('reg_username');
+		$password = $this->input->post('reg_password');
+		$repassword = $this->input->post('reg_repassword');
+
+		// Validasi
+		if (empty($nama) || empty($username) || empty($password) || empty($repassword)) {
+			$this->session->set_flashdata('error', 'Semua field harus diisi.');
+			redirect('auth/registrasi'); // arahkan balik ke form registrasi
+			return;
+		}
+	
+		if ($password !== $repassword) {
+			$this->session->set_flashdata('error', 'Password dan konfirmasi tidak cocok.');
+			redirect('auth/registrasi');
+			return;
+		}
+	
+		// Cek username
+		$cek_username = $this->db->get_where('nj_users', ['USERNAME' => $username])->row();
+		if ($cek_username) {
+			$this->session->set_flashdata('error', 'Username sudah digunakan.');
+			redirect('auth/registrasi');
+			return;
+		}
+	
+		// Insert user
+		$data_insert = [
+			'NAMA' => $nama,
+			'USERNAME' => $username,
+			'PASSWORD' => password_hash($password, PASSWORD_DEFAULT),
+			'LEVEL' => 2,
+			'TGL_INSERT' => date('Y-m-d H:i:s')
+		];
+	
+		$this->db->insert('nj_users', $data_insert);
+	
+		$this->session->set_flashdata('success', 'Registrasi berhasil. Silahkan login.');
+		redirect('auth');
+	}
+
 	public function logout(){
 		 // Hapus session ketika logout
 		 $this->session->unset_userdata('logged_in');

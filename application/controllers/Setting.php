@@ -50,8 +50,9 @@ class Setting extends CI_Controller {
 
     // Update nama dan username tetap dilakukan
     $data_update = [
-        'nama' => $nama_user,
-        'username' => $username,
+        'NAMA' => $nama_user,
+        'USERNAME' => $username,
+        'TGL_UPDATE' => date('Y-m-d H:i:s'),
     ];
 
     // Kalau password field diisi
