@@ -10,19 +10,19 @@ Proyek ini terinspirasi dari pengalaman teman saya yang sering kehilangan link r
 
 - **Dashboard/Home**  
   Halaman awal setelah login yang menampilkan informasi jumlah proyek dan tugas yang sedang dikerjakan.
-  ![Home](assets.images/github/1.home.png)
+  ![Home](../assets/images/github/1.home.png)
 - **Task Management**  
   Halaman untuk melihat, menambahkan, dan mengelola daftar tugas yang sedang dikerjakan.
-  ![Task](assets.images/github/2.task.png)
+  ![Task](../assets/images/github/2.task.png)
 - **Project Management**  
   Halaman untuk mengelola proyek yang telah dibuat, termasuk detail tentang tugas-tugas dalam setiap proyek.
-  ![Project](assets.images/github/3.project.png)
+  ![Project](../assets/images/github/3.project.png)
 - **Link Referensi**  
   Halaman khusus untuk menyimpan link referensi pustaka, yang dikelompokkan berdasarkan kategori.
-  ![Link](assets.images/github/4.link.png)
+  ![Link](../assets/images/github/4.link.png)
 - **Settings**  
   Halaman untuk mengelola informasi akun, seperti nama, username, dan password.
-  ![Setting](assets.images/github/5.setting.png)
+  ![Setting](../assets/images/github/5.setting.png)
 
 ---
 
