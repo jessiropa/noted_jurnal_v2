@@ -98,7 +98,7 @@
             </a>
         </li>
         <li class="nav-item menu-items">
-            <a class="nav-link" href="<?=base_url()?>pages/forms/basic_elements.html">
+            <a class="nav-link" href="<?=base_url('setting');?>">
                 <span class="menu-icon">
                     <i class="mdi mdi-settings"></i>
                 </span>
@@ -109,14 +109,14 @@
         <?php 
                 // print_r($this->session->userdata());
                 if ($level == '1'): ?>
-        <li class="nav-item menu-items">
+        <!-- <li class="nav-item menu-items">
             <a class="nav-link" href="<?=base_url()?>pages/forms/basic_elements.html">
                 <span class="menu-icon">
                     <i class="mdi mdi-account-multiple-plus"></i>
                 </span>
                 <span class="menu-title">Add Users</span>
             </a>
-        </li>
+        </li> -->
         <?php endif; ?>
         <li class="nav-item menu-items">
             <a class="nav-link" href="<?php echo site_url('auth/logout'); ?>">
